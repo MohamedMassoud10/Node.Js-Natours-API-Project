@@ -5,9 +5,15 @@ const port = 3000;
 
 app.use(express.json());
 
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
+
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
+console.log(JSON.stringify(tours));
 
 const getAllTours = (req, res) => {
   res.status(200).json({
