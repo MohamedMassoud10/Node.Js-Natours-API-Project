@@ -18,6 +18,7 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
+const users = JSON.parse(fs.readFileSync(`./dev-data/data/users.json`));
 // 2)ROUTES HANDLING
 
 const getAllTours = (req, res) => {
@@ -95,6 +96,19 @@ const deleteTour = (req, res) => {
     data: null,
   });
 };
+
+const getAllUsers = (req, res) => {
+  res.status(500).json({
+    status: 'success',
+    data: users,
+  });
+};
+
+const createUsers = (req, res) => {
+  const newId = users[users.length - 1].id + 1;
+  const newUser = Object.assign({ id: newId }, req.body);
+};
+
 // 3) ROUTES
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
 app
@@ -102,6 +116,13 @@ app
   .get(getTour)
   .patch(updateTour)
   .delete(deleteTour);
+
+app.route('/api/v1/users').get(getAllUsers).post(createUsers);
+app
+  .route('/api/v1/users/:id')
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
 
 // 4) STARTING THE SERVER
 
