@@ -26,6 +26,23 @@ db.once('open', function callback() {
   console.log('connected successfully');
 });
 
+const tourSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    require: [true, 'A tour must have a name'],
+    uniq: true,
+  },
+  rating: {
+    type: Number,
+    default: 4.5,
+  },
+  price: {
+    type: Number,
+    require: [true, 'A tour must have a price'],
+  },
+});
+const tour = mongoose.model('Tour', tourSchema);
+
 const app = require('./app');
 const port = 3000;
 app.listen(port, () => {
