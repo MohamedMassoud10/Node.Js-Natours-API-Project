@@ -49,11 +49,14 @@ const testTour = new Tour({
   price: 400,
 });
 
-Tour.save()
+testTour
+  .save()
   .then((doc) => {
     console.log(doc);
   })
-  .catch((err) => 'ERORR', err);
+  .catch((err) => {
+    'ERORR 💥:', err;
+  });
 
 const app = require('./app');
 const port = 3000;
