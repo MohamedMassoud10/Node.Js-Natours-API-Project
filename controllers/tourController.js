@@ -1,8 +1,4 @@
-const fs = require('fs');
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
-);
-
+const Tour = require('../models/tourModels');
 exports.checkID = (req, res, next, val) => {
   if (req.params.id * 1 > tours.length) {
     return res.status(404).json({

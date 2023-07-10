@@ -17,8 +17,8 @@ const DB = process.env.DATABASE.replace(
 //   .then(() => {
 //     console.log('here we go connected !');
 //   });
-
-const uri = 'mongodb://127.0.0.1:27017/natours-text';
+const uri =
+  'mongodb+srv://mohamed:K1EfdRUpDBhXF5bw@mohamed.5ocdbqd.mongodb.net/?authMechanism=SCRAM-SHA-1&authSource=mohamed';
 mongoose.connect(uri);
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
@@ -26,37 +26,14 @@ db.once('open', function callback() {
   console.log('connected successfully');
 });
 
-const tourSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    require: [true, 'A tour must have a name'],
-    uniq: true,
-  },
-  rating: {
-    type: Number,
-    default: 4.5,
-  },
-  price: {
-    type: Number,
-    require: [true, 'A tour must have a price'],
-  },
-});
-const Tour = mongoose.model('Tour', tourSchema);
-
-const testTour = new Tour({
-  name: 'Alexandria',
-  rate: 4.5,
-  price: 400,
-});
-
-testTour
-  .save()
-  .then((doc) => {
-    console.log(doc);
-  })
-  .catch((err) => {
-    'ERORR 💥:', err;
-  });
+// testTour
+//   .save()
+//   .then((doc) => {
+//     console.log(doc);
+//   })
+//   .catch((err) => {
+//     'ERORR 💥:', err;
+//   });
 
 const app = require('./app');
 const port = 3000;
