@@ -32,10 +32,12 @@ const tourSchema = new mongoose.Schema({
     required: [true, 'A tour must have a price'],
   },
   priceDiscount: {
-    summary: {
-      type: String,
-      trim: true,
-      required: [true, 'A tour must have a price discount summary'],
+    type: Number,
+    validate: {
+      validator: function (value) {
+        return value >= 0;
+      },
+      message: 'Price discount must be a non-negative number',
     },
   },
   description: {
