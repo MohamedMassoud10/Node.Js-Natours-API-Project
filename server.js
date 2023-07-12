@@ -1,7 +1,7 @@
-const app = require('./app');
-const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config({ path: './config.env' });
+const app = require('./app');
+const mongoose = require('mongoose');
 
 const uri =
   'mongodb+srv://mohamed:K1EfdRUpDBhXF5bw@mohamed.5ocdbqd.mongodb.net/?authMechanism=SCRAM-SHA-1&authSource=mohamed';
