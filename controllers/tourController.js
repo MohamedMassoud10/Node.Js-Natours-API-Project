@@ -31,17 +31,17 @@ exports.getAllTours = async (req, res) => {
     } else {
       query = query.select('-__v');
     }
+    //
+    //4) pagination
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 1 || 100;
+    const skip = (page - 1) * limit;
+    query = query.skip(skip).limit(limit);
 
-    /// FILTER Method one
-    //const query = await Tour.find({
-    //duration:5,
-    //difficulty:'easy'
-    //})
-
-    /// FILTER Method Two
-    //const query = await Tour.find()
-    //.where('duration')
-    //.equals(5)
+    if (req.query.page) {
+      const countPage = await Tour.countDocuments();
+      if (skip >= countPage) throw new Error(' this page does not exist !');
+    }
 
     // EXECUTE THE QUERY
     const tours = await query;
