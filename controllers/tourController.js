@@ -1,6 +1,12 @@
 const { query } = require('express');
 const Tour = require('./../models/tourModel');
+exports.aliasTopTours = async (req, res, next) => {
+  req.query.limit = '5';
+  req.query.fields = 'price,name,summary,difficulty,ratingsAverage';
+  req.query.sort = '-ratingsAverage,price';
 
+  next();
+};
 exports.getAllTours = async (req, res) => {
   try {
     //BUILD THE QUERY
@@ -13,7 +19,6 @@ exports.getAllTours = async (req, res) => {
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|lte|gt|le)\b/g, (match) => `$${match}`);
 
-    console.log(JSON.parse(queryStr));
     let query = Tour.find(JSON.parse(queryStr));
     //
     // 2) Sorting
