@@ -58,45 +58,6 @@ class APIFeatures {
 
 exports.getAllTours = async (req, res) => {
   try {
-    //BUILD THE QUERY
-    //1) FILTERING
-    // const queryObj = { ...req.query };
-    // const excludedFields = ['page', 'sort', 'limit', 'fields'];
-
-    // excludedFields.forEach((el) => delete queryObj[el]);
-
-    // let queryStr = JSON.stringify(queryObj);
-    // queryStr = queryStr.replace(/\b(gte|lte|gt|le)\b/g, (match) => `$${match}`);
-
-    // let query = Tour.find(JSON.parse(queryStr));
-    // //
-    // 2) Sorting
-    // if (req.query.sort) {
-    //   const sortBy = req.query.sort.split(',').join(' ');
-    //   query = query.sort(sortBy);
-    // } else {
-    //   query = query.sort('-createdAt');
-    // }
-    // 3) Field Limiting
-    //
-    // if (req.query.fields) {
-    //   const fields = req.query.fields.split(',').join(' ');
-    //   query = query.select(fields);
-    // } else {
-    //   query = query.select('-__v');
-    // }
-    //
-    //4) pagination
-    // const page = req.query.page * 1 || 1;
-    // const limit = req.query.limit * 1 || 100;
-    // const skip = (page - 1) * limit;
-    // query = query.skip(skip).limit(limit);
-
-    // if (req.query.page) {
-    //   const countPage = await Tour.countDocuments();
-    //   if (skip >= countPage) throw new Error(' this page does not exist !');
-    // }
-
     // EXECUTE THE QUERY
 
     const feature = new APIFeatures(Tour.find(), req.query)
