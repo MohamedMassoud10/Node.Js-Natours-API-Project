@@ -3,7 +3,7 @@ const app = express();
 const morgan = require('morgan');
 const userRouter = require('./routes/userRoutes');
 const tourRouter = require('./routes/tourRoutes');
-
+const AppError = require('./utils/appErrors');
 // 1) MIDDLEWARE
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -22,10 +22,10 @@ app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 
 app.all('*', (req, res, next) => {
-  const err = new Error(`We could not find ${req.originalUrl} on the server!`);
-  err.status = 'fail';
-  err.statusCode = 404;
-  next(err);
+  // const err = new Error(`We could not find ${req.originalUrl} on the server!`);
+  // err.status = 'fail';
+  // err.statusCode = 404;
+  next(new AppError(`We could not find ${req.originalUrl} on the server!`));
 });
 
 app.use((err, req, res, next) => {
