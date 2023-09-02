@@ -1,5 +1,11 @@
+const AppError = require('../utils/appErrors');
+
+const handelCastErrorDB = (err) => {
+  const message = `Invalid ${err.path}:${err.value}`;
+  return new AppError(message, 400);
+};
+
 const sendErrorDev = (err, res) => {
-  console.log('HEllo');
   return res.status(err.statusCode).json({
     status: err.status,
     error: err,
@@ -29,15 +35,14 @@ const sendErrorProd = (err, res) => {
 };
 
 module.exports = (err, req, res, next) => {
-  console.log(err.stack);
-  console.log(process.env.NODE_ENV);
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 
   if (process.env.NODE_ENV === 'development') {
-    console.log('Hey');
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
+    let error = { ...err };
+    if (error.name === 'CastError') error = handelCastErrorDB(error);
     sendErrorProd(err, res);
   }
 };
