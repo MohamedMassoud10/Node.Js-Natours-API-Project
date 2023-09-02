@@ -1,5 +1,6 @@
 const dotenv = require('dotenv');
 dotenv.config();
+
 const app = require('./app');
 const mongoose = require('mongoose');
 
@@ -18,30 +19,3 @@ const port = 3000;
 app.listen(port, () => {
   console.log(`listening on port: ${port}`);
 });
-//
-//
-//
-//
-//
-//
-////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-/////////////////////////////////////////////////
-//////////////////////////////////////
-//////////////////////////////
-//////////////////////const DB = process.env.DATABASE.replace(
-//   '<password>',
-//   process.env.DATABASE_PASSWORD
-// );
-
-// // mongoose
-// //   .connect(
-// //     'mongodb+srv://mohamed:<WONOSlwc5fu604gF>@natours.uweji0s.mongodb.net/?retryWrites=true&w=majority',
-// //     {
-// //       useNewUrlParser: true,
-// //     }
-// //   )
-// //   .then(() => {
-// //     console.log('here we go connected !');
-// //   });
