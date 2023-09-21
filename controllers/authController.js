@@ -6,7 +6,7 @@ exports.signUp = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: 'success',
     data: {
-      tour: newUser,
+      user: newUser,
     },
   });
   next();
