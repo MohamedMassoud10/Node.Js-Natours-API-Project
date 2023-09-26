@@ -1,8 +1,9 @@
+const util = require('util');
 const User = require('./../models/userModel');
 const jwt = require('jsonwebtoken');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appErrors');
-
+const promisify = util.promisify(jwt.verify);
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -63,4 +64,13 @@ exports.protect = catchAsync(async (req, res, next) => {
       new AppError('you are not logged in ! please login to get access!', 401)
     );
   }
+
+  const decoded = await promisify(token, process.env.JWT_SECRET);
+  const currentUser = await User.findById(decoded.id);
+  if (!currentUser) {
+    return next(
+      new AppError('the user that belong to this token does not exist!', 401)
+    );
+  }
+  next();
 });
