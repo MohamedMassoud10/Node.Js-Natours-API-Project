@@ -15,6 +15,12 @@ const userSchema = mongoose.Schema({
     validate: [validator.isEmail, 'please provide a valid email'],
   },
   photo: String,
+  role: {
+    type: String,
+    enum: ['user', 'guide', 'lead-guide', 'admin'],
+    default: 'user',
+  },
+
   password: {
     type: String,
     required: [true, 'please provide a password'],
@@ -38,6 +44,7 @@ userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = undefined;
+  this.passwordChangedAt = Date.now() - 1000;
   next();
 });
 
