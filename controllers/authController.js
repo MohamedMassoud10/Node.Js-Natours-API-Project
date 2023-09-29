@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const util = require('util');
 const User = require('./../models/userModel');
 const jwt = require('jsonwebtoken');
@@ -53,7 +54,6 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
-  console.log('in protect ');
   let token;
   if (
     req.headers.authorization &&
@@ -87,9 +87,9 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.restrictTo = (...roles) => {
+//Authorization
+exports.allowedTo = (...roles) => {
   return (req, res, next) => {
-    console.log('req.user.role', req.user.role);
     // roles ['admin', 'lead-guide']. role='user'
     if (!roles.includes(req.user.role)) {
       return next(
@@ -104,7 +104,9 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on POSTed email
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
-    return next(new AppError('There is no user with email address.', 404));
+    return next(
+      new AppError(`There is no user with that email ${req.body.email}`, 404)
+    );
   }
 
   // 2) Generate the random reset token
@@ -140,4 +142,33 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   }
 });
 
-exports.resetPassword = (req, res, next) => {};
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(new AppError('token is invalid or has expired', 400));
+  }
+
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  user.passwordResetExpires = undefined;
+  user.passwordResetToken = undefined;
+
+  await user.save();
+
+  const token = signToken(user.id);
+
+  res.status(200).json({
+    status: 'success',
+    token,
+  });
+  next();
+});
